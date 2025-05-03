@@ -91,7 +91,10 @@ function App() {
   }, []); // Empty dependency array to run only once on mount
   */
 
-
+  // Function to toggle dropdown visibility
+  const myFunction = () => {
+    document.getElementById("myDropdown").classList.toggle("show");
+  };
   return (
     <>
     <div className = "flexbox-container"
@@ -101,7 +104,16 @@ function App() {
               console.log("index is " + index + 1);
               return index + 1;} return 0;})}> Click me to change the bg color!</button>
     
-  
+  {/* Dropdown menu */}
+  <div className="dropdown"> {/*creates div conatiner for dopdwon menu, cssclass "dropdown" is used to style the drop down menu*/}
+        <button onClick={myFunction} className="dropbtn">Choose Topic</button> {/*button user clicks to show dropdown menu*/}
+        <div id="myDropdown" className="dropdown-content"> {/*shows contents of button*/}
+          <a href="#">Anxiety Relief</a> {/*anchor links*/}
+          <a href="#">Self-Esteem Boost</a>
+          <a href="#">Stress Management</a>
+        </div>
+      </div>
+
     <div>
       <h1>Mindquill</h1>
       {/* Disable button while loading */}
