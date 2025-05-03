@@ -87,30 +87,41 @@ button:focus-visible {
   }
 }
 
-/*Flex boxes for the notebook*/
-
-.notebook{ /*notebook class*/
-  display: flex;  /* puts pages side by side */
-  padding: 25px; /*padding included so words dont sit on edge of borders*/
-  background-color: #fffefc;
-  border: 3px solid #ccc; /*border around the nb */
-  border-radius: 10px; /* nb corners become rounded*/
-  max-width: 1000px; /* this keeps page content centered*/
-  margin: 20px; /*center the nb on age*/
+.dropdown{
+  position: relative; /*positions dropdown content for this cont\ainer*/
+  display: inline-block; /*makes dropdown container sit next to other elments*/
 }
 
-.notebook .left{  /*.left is child element of .notebook (parent element)*/
-  background-color: #fff;
-  flex: 1; /*left and rigt sections take = space, divides the boxes evenly space wise*/
-  padding: 20px;
-  border-radius: 10px; 
-  margin-right: 15px; /*makes sure theres = space in bwtween left and right flexbox*/
+.dropbtn{
+  background-color:#93d495; 
+  color: white; /*color of text*/
+  padding: 15px; /*space in button so text doesnt sit @ borders*/
+  border: none; /*no button border*/
+cursor: pointer;
 }
 
-.notebook .right{  
-  background-color: #fff;
-  flex: 1; 
-  padding: 20px;
-  border-radius: 10px; 
-  margin-left: 15px; 
+.dropdown-content{
+  display: none; /*initially, the dropdown contents r hidden*/
+  position: absolute; /*dropdown content stay below the button*/
+  background-color: #FFFFFF; /*background of dropdown menu*/
+  min-width: 160px; /*minimum width of dropdown menu*/
+  box-shadow: 0px 8px 16px 0px rgba(240, 221, 221, 0.2);
+  z-index: 1; /*drop down will stay on top of other content */
 }
+
+/* Links inside the dropdown (Ensure each link appears on a new line) */
+.dropdown-content a {
+  display: block; 
+  padding: 12px 16px; /* padding for the links */
+  text-decoration: none; /* no underlied links */
+  color: black; 
+  margin: 5px 0; /* add space between links */
+}
+
+.dropdown-conent a{
+  display: block; /*links r shown in their own lines*/
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.show {display:block;}
