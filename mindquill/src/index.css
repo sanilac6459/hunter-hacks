@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #D0F4DE;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -65,4 +65,32 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/*Flex boxes for the notebook*/
+
+.notebook{ /*notebook class*/
+  display: flex;  /* puts pages side by side */
+  padding: 25px; /*padding included so words dont sit on edge of borders*/
+  background-color: #fffefc;
+  border: 3px solid #ccc; /*border around the nb */
+  border-radius: 10px; /* nb corners become rounded*/
+  max-width: 1000px; /* this keeps page content centered*/
+  margin: 20px; /*center the nb on age*/
+}
+
+.notebook .left{  /*.left is child element of .notebook (parent element)*/
+  background-color: #fff;
+  flex: 1; /*left and rigt sections take = space, divides the boxes evenly space wise*/
+  padding: 20px;
+  border-radius: 10px; 
+  margin-right: 15px; /*makes sure theres = space in bwtween left and right flexbox*/
+}
+
+.notebook .right{  
+  background-color: #fff;
+  flex: 1; 
+  padding: 20px;
+  border-radius: 10px; 
+  margin-left: 15px; 
 }
