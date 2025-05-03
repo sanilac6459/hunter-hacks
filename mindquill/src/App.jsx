@@ -67,14 +67,14 @@ function App() {
 
   const [imageUrl, setImageUrl] = useState("");
 
-  const generateImage = async () => {
+  const generateImage = async (ImagePrompt) => {
     try {
       const response = await axios.post(API_IMAGE_URL, {
         contents: [
           {
             parts: [
               {
-                text: "Create a picture of a flower"
+                text: ImagePrompt
               }
             ]
           }
@@ -138,7 +138,7 @@ function App() {
     <>
     <div>
       <h1>Gemini Image Generator</h1>
-      <button onClick={generateImage}>Generate Image</button>
+      <button onClick={() => generateImage("A futuristic city with flying cars")}>Generate Image</button>
       {imageUrl && <img src={imageUrl} alt="Generated AI Art" />}
     </div>
 
