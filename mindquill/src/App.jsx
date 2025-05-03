@@ -48,12 +48,13 @@ import remarkGfm from 'remark-gfm'; // Import a plugin for handling markdown fea
 // WARNING: Hardcoding API key in frontend is INSECURE.
 // Use environment variables or a backend in production.
 import HTMLFlipBook from 'react-pageflip';
-
+import { GoogleGenAI, Modality } from "@google/genai";
 const API_KEY = "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q";
 
 
 const API_URL =`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-
+const API_IMAGE_URL= 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q';
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 
 function App() {
@@ -64,6 +65,47 @@ function App() {
   const [responseText, setResponseText] = useState("");
   const [isLoading, setIsLoading] = useState(false); 
 
+  const [imageUrl, setImageUrl] = useState("");
+
+  const generateImage = async () => {
+    try {
+      const response = await axios.post(API_IMAGE_URL, {
+        contents: [
+          {
+            parts: [
+              {
+                text: "Create a picture of a flower"
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ["TEXT", "IMAGE"]
+        }
+      });
+
+      console.log("API Response:", response.data); // Debugging logs
+
+      // Extracting Image Data
+     
+      const imageData = response.data?.candidates?.[0]?.content?.parts?.find(part => part.inlineData);
+      const imageURL = imageData.inlineData.data;
+      // const imageData = response.data?.candidates?.[0]?.content?.parts?.find(part => part.inlineData);
+      //  console.log("Extracted InlineData:", imageData);
+      // console.log("MIME Type:", imageData?.mimeType);
+      // console.log("Base64 Data:", imageData?.data);
+
+      if (imageData) {
+        console.log("Extracted Image Data:", imageData); // Debugging log
+        setImageUrl(`data:${imageData.mimeType};base64,${imageData.inlineData.data}`);
+      } else {
+        console.error("No image data found in response.");
+      }
+    } catch (error) {
+      console.error("Error generating image:", error.response?.data || error.message);
+    }
+    console.log("image url is: " + imageUrl);
+  };
   const fetchAIResponse = async () => {
     setIsLoading(true);
     try {
@@ -94,6 +136,12 @@ function App() {
 
   return (
     <>
+    <div>
+      <h1>Gemini Image Generator</h1>
+      <button onClick={generateImage}>Generate Image</button>
+      {imageUrl && <img src={imageUrl} alt="Generated AI Art" />}
+    </div>
+
     <HTMLFlipBook width={300} height={500}>
             {/* <PageCover>BOOK TITLE</PageCover> */}
             <div className="page 0">
