@@ -96,6 +96,10 @@ function App() {
     <>
     <HTMLFlipBook width={300} height={500}>
             {/* <PageCover>BOOK TITLE</PageCover> */}
+            <div className="page 0">
+                <h1>Title of Page 1</h1>
+                <p>This is the paragraph below the title. You can add more details here.</p>
+            </div>
             <div className="demoPage">Page 1</div>
             <div className="demoPage">Page 2</div>
             <div className="demoPage">Page 3</div>
