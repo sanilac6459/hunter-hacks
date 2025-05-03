@@ -47,6 +47,8 @@ import remarkGfm from 'remark-gfm'; // Import a plugin for handling markdown fea
 
 // WARNING: Hardcoding API key in frontend is INSECURE.
 // Use environment variables or a backend in production.
+
+
 const API_KEY = "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q";
 
 
@@ -55,6 +57,10 @@ const API_URL =`https://generativelanguage.googleapis.com/v1beta/models/gemini-2
 
 
 function App() {
+  
+  const [index, setIndex] = useState(0);
+  const colorsArray = ['#FF99C8','#FCF6BD','#D0F4DE','#A9DEF9','#E4C1F9'];
+
   const [responseText, setResponseText] = useState("");
   const [isLoading, setIsLoading] = useState(false); 
 
@@ -87,6 +93,15 @@ function App() {
 
 
   return (
+    <>
+    <div className = "flexbox-container"
+    style={{ backgroundColor: colorsArray[index]}}>
+      <button onClick={() => setIndex((index) => {
+            if (index < colorsArray.length - 1) {
+              console.log("index is " + index + 1);
+              return index + 1;} return 0;})}> Click me to change the bg color!</button>
+    
+  
     <div>
       <h1>Mindquill</h1>
       {/* Disable button while loading */}
@@ -101,6 +116,8 @@ function App() {
       </ReactMarkdown>
       </div>
     </div>
+  </div>
+    </>
   );
 }
 
