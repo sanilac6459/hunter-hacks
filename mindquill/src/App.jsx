@@ -162,18 +162,7 @@ function App() {
       <button onClick={() => generateImage("A futuristic city with flying cars")}>Generate Image</button>
       {imageUrl && <img src={imageUrl} alt="Generated AI Art" />}
     </div>
-
-    <HTMLFlipBook width={300} height={500}>
-            {/* <PageCover>BOOK TITLE</PageCover> */}
-            <div className="page 0">
-                <h1>Title of Page 1</h1>
-                <p>This is the paragraph below the title. You can add more details here.</p>
-            </div>
-            <div className="demoPage">Page 1</div>
-            <div className="demoPage">Page 2</div>
-            <div className="demoPage">Page 3</div>
-            <div className="demoPage">Page 4</div>
-        </HTMLFlipBook>
+    
 <div className = "Pokemon_book">
 <div className = "flexbox-container"
     style={{ backgroundColor: colorsArray[index]}}>
