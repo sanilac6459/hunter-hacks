@@ -18,13 +18,19 @@ import remarkGfm from 'remark-gfm'; // Import a plugin for handling markdown fea
 // WARNING: Hardcoding API key in frontend is INSECURE.
 // Use environment variables or a backend in production.
 import HTMLFlipBook from 'react-pageflip';
-
+import { GoogleGenAI, Modality } from "@google/genai";
 const API_KEY = "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q";
 
 
 const API_URL =`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+<<<<<<< HEAD
 
 const ai = new GoogleGenAI({ apiKey: "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q" });
+=======
+const API_IMAGE_URL= 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q';
+const ai = new GoogleGenAI({ apiKey: API_KEY });
+
+>>>>>>> origin/main
 
 function App() {
 
@@ -35,6 +41,47 @@ function App() {
   const [responseText, setResponseText] = useState("");
   const [isLoading, setIsLoading] = useState(false); 
 
+  const [imageUrl, setImageUrl] = useState("");
+
+  const generateImage = async (ImagePrompt) => {
+    try {
+      const response = await axios.post(API_IMAGE_URL, {
+        contents: [
+          {
+            parts: [
+              {
+                text: ImagePrompt
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ["TEXT", "IMAGE"]
+        }
+      });
+
+      console.log("API Response:", response.data); // Debugging logs
+
+      // Extracting Image Data
+     
+      const imageData = response.data?.candidates?.[0]?.content?.parts?.find(part => part.inlineData);
+      const imageURL = imageData.inlineData.data;
+      // const imageData = response.data?.candidates?.[0]?.content?.parts?.find(part => part.inlineData);
+      //  console.log("Extracted InlineData:", imageData);
+      // console.log("MIME Type:", imageData?.mimeType);
+      // console.log("Base64 Data:", imageData?.data);
+
+      if (imageData) {
+        console.log("Extracted Image Data:", imageData); // Debugging log
+        setImageUrl(`data:${imageData.mimeType};base64,${imageData.inlineData.data}`);
+      } else {
+        console.error("No image data found in response.");
+      }
+    } catch (error) {
+      console.error("Error generating image:", error.response?.data || error.message);
+    }
+    console.log("image url is: " + imageUrl);
+  };
   const fetchAIResponse = async () => {
     setIsLoading(true);
     try {
@@ -55,6 +102,7 @@ function App() {
   };
 
 
+<<<<<<< HEAD
   const pokemonData = [
     {
       id: "006",
@@ -105,13 +153,48 @@ function App() {
     <>
 <div className = "Pokemon_book">
 <div 
+=======
+  // Function to toggle dropdown visibility
+  const myFunction = () => {
+    document.getElementById("myDropdown").classList.toggle("show");
+  };
+  return (
+    <>
+    <div>
+      <h1>Gemini Image Generator</h1>
+      <button onClick={() => generateImage("A futuristic city with flying cars")}>Generate Image</button>
+      {imageUrl && <img src={imageUrl} alt="Generated AI Art" />}
+    </div>
+
+    <HTMLFlipBook width={300} height={500}>
+            {/* <PageCover>BOOK TITLE</PageCover> */}
+            <div className="page 0">
+                <h1>Title of Page 1</h1>
+                <p>This is the paragraph below the title. You can add more details here.</p>
+            </div>
+            <div className="demoPage">Page 1</div>
+            <div className="demoPage">Page 2</div>
+            <div className="demoPage">Page 3</div>
+            <div className="demoPage">Page 4</div>
+        </HTMLFlipBook>
+    <div className = "flexbox-container"
+>>>>>>> origin/main
     style={{ backgroundColor: colorsArray[index]}}>
       <button onClick={() => setIndex((index) => {
             if (index < colorsArray.length - 1) {
               console.log("index is " + index + 1);
               return index + 1;} return 0;})}> Click me to change the bg color!</button>
     
-  
+  {/* Dropdown menu */}
+  <div className="dropdown"> {/*creates div conatiner for dopdwon menu, cssclass "dropdown" is used to style the drop down menu*/}
+        <button onClick={myFunction} className="dropbtn">Choose Topic</button> {/*button user clicks to show dropdown menu*/}
+        <div id="myDropdown" className="dropdown-content"> {/*shows contents of button*/}
+          <a href="#">Anxiety Relief</a> {/*anchor links*/}
+          <a href="#">Self-Esteem Boost</a>
+          <a href="#">Stress Management</a>
+        </div>
+      </div>
+
     <div>
       <h1>Mindquill</h1>
       {/* Disable button while loading */}

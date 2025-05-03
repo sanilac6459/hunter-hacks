@@ -124,6 +124,7 @@ html {
   background-color: #f1c40f;
 }
 
+<<<<<<< HEAD
 .type-ground {
   background-color: #e67e22;
 }
@@ -171,3 +172,43 @@ html {
   background: blue;
   color: #000;
 }
+=======
+.dropdown{
+  position: relative; /*positions dropdown content for this cont\ainer*/
+  display: inline-block; /*makes dropdown container sit next to other elments*/
+}
+
+.dropbtn{
+  background-color:#93d495; 
+  color: white; /*color of text*/
+  padding: 15px; /*space in button so text doesnt sit @ borders*/
+  border: none; /*no button border*/
+cursor: pointer;
+}
+
+.dropdown-content{
+  display: none; /*initially, the dropdown contents r hidden*/
+  position: absolute; /*dropdown content stay below the button*/
+  background-color: #FFFFFF; /*background of dropdown menu*/
+  min-width: 160px; /*minimum width of dropdown menu*/
+  box-shadow: 0px 8px 16px 0px rgba(240, 221, 221, 0.2);
+  z-index: 1; /*drop down will stay on top of other content */
+}
+
+/* Links inside the dropdown (Ensure each link appears on a new line) */
+.dropdown-content a {
+  display: block; 
+  padding: 12px 16px; /* padding for the links */
+  text-decoration: none; /* no underlied links */
+  color: black; 
+  margin: 5px 0; /* add space between links */
+}
+
+.dropdown-conent a{
+  display: block; /*links r shown in their own lines*/
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.show {display:block;}
+>>>>>>> origin/main
