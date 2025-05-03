@@ -47,7 +47,7 @@ import remarkGfm from 'remark-gfm'; // Import a plugin for handling markdown fea
 
 // WARNING: Hardcoding API key in frontend is INSECURE.
 // Use environment variables or a backend in production.
-
+import HTMLFlipBook from 'react-pageflip';
 
 const API_KEY = "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q";
 
@@ -97,6 +97,17 @@ function App() {
   };
   return (
     <>
+    <HTMLFlipBook width={300} height={500}>
+            {/* <PageCover>BOOK TITLE</PageCover> */}
+            <div className="page 0">
+                <h1>Title of Page 1</h1>
+                <p>This is the paragraph below the title. You can add more details here.</p>
+            </div>
+            <div className="demoPage">Page 1</div>
+            <div className="demoPage">Page 2</div>
+            <div className="demoPage">Page 3</div>
+            <div className="demoPage">Page 4</div>
+        </HTMLFlipBook>
     <div className = "flexbox-container"
     style={{ backgroundColor: colorsArray[index]}}>
       <button onClick={() => setIndex((index) => {
