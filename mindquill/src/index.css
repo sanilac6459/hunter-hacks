@@ -33,7 +33,27 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: black;
 }
+
+p {
+  color: black;
+}
+
+
+.markdown-content {
+  color: black !important; 
+}
+
+.markdown-content a {
+  color: black !important; 
+  text-decoration: underline; 
+}
+
+.markdown-content li, ol, ul{
+  color: black !important; 
+}
+
 
 button {
   border-radius: 8px;

@@ -1,40 +1,97 @@
-import './index.css';
+
 import React, { useState } from "react";
 import axios from "axios";
+import ReactMarkdown from 'react-markdown'; // Import ReactMarkdown
+import remarkGfm from 'remark-gfm'; // Import a plugin for handling markdown features
+// If you installed rehype-highlight for code highlighting:
+// import rehypeHighlight from 'rehype-highlight';
+// You might also need to import a CSS theme for highlighting, e.g.,
+// import 'highlight.js/styles/github.css'; // Choose a style you like
+
+// WARNING: Hardcoding API key in frontend is INSECURE.
+// Use environment variables or a backend in production.
+
 
 const API_KEY = "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q";
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q`;
-//`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.1-pro:generateContent?key=AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q`;
+
+
+const API_URL =`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+
+
 function App() {
+  
+  const [index, setIndex] = useState(0);
+  const colorsArray = ['#FF99C8','#FCF6BD','#D0F4DE','#A9DEF9','#E4C1F9'];
+
   const [responseText, setResponseText] = useState("");
+  const [isLoading, setIsLoading] = useState(false); 
 
   const fetchAIResponse = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post(API_URL, {
-        contents: [{ parts: [{ text: "In 50 words max, write a poem about flowers" }] }],
+        contents: [{ parts: [{ text: "Write a poem about flower in 50 words" }] }],
       });
 
-      setResponseText(response.data?.candidates?.[0]?.content?.parts?.[0]?.text  ?? "No response");
+      const aiContent = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      setResponseText(aiContent || "No response text found in the expected format.");
+
     } catch (error) {
-      console.error("Error:", error);
-      setResponseText("Error fetching AI response.");
+      console.error("Error fetching AI response:", error.response?.data || error.message);
+      setResponseText(`Error fetching AI response: ${error.response?.data?.error?.message || error.message}`);
+    } finally {
+       setIsLoading(false); // Set loading to false
     }
   };
-  // console.log("API Response:", response.data);
 
-console.log({responseText});
+  // Consider fetching on mount or based on user action
+  // Example using useEffect to fetch on mount (like before):
+  /*
+  useEffect(() => {
+    fetchAIResponse();
+  }, []); // Empty dependency array to run only once on mount
+  */
+
 
   return (
+    <>
+    <div className = "flexbox-container"
+    style={{ backgroundColor: colorsArray[index]}}>
+      <button onClick={() => setIndex((index) => {
+            if (index < colorsArray.length - 1) {
+              console.log("index is " + index + 1);
+              return index + 1;} return 0;})}> Click me to change the bg color!</button>
+    
+  
     <div>
-      <h1>AI Response</h1>
-      <button onClick={fetchAIResponse}>Ask AI</button>
-      {/* <p>The response is: {responseText}</p> */}
-      <p>{responseText}</p>
+      <h1>Mindquill</h1>
+      {/* Disable button while loading */}
+      <button onClick={fetchAIResponse} disabled={isLoading}>
+         {isLoading ? 'Fetching...' : 'Ask AI'}
+      </button>
+      <p>Response:</p>
+      {/* Use ReactMarkdown to render the responseText */}
+      <div class = "markdown">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+         {responseText}
+      </ReactMarkdown>
+      </div>
     </div>
+  </div>
+    </>
   );
 }
 
 export default App;
+
+
+
+
+
+
+
 // import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
