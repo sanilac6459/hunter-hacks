@@ -33,8 +33,22 @@ function App() {
 // make a text box 
 // make a button to submit the text box
 
+const [inputValue, setInputValue] = useState('');
 
-  const user_topic = "Write 7 paragraphs about Ishra and Sanila two friends going to college on a rainy day, with a title, and the 7 paragraphs following it, each paragraph should have 3 sentences each, just text DON'T ADD like ** for the title";
+const handleInputChange = (event) => {
+  setInputValue(event.target.value);
+};
+
+const handleKeyDown = (event) => {
+  if (event.key === 'Enter') {
+    // Call your function here with the inputValue
+    processInput(inputValue);
+    // Optionally clear the input after processing
+    setInputValue('');
+  }
+};
+
+  const user_topic = "Create a story about" + inputValue + "First paragraph must be title, then 6 paragraphs, and the last paragrpah must be The End paragraph, and also each body paragraph must be 3 sentences, short sentences, whatever the story is it must relate back to health and wellness, don't bold anymore"; // This is the input value from the text box
   const [index, setIndex] = useState(0);
   const colorsArray = ['#FF99C8','#FCF6BD','#D0F4DE','#A9DEF9','#E4C1F9'];
 
@@ -59,6 +73,13 @@ function App() {
        setIsLoading(false); // Set loading to false
     }
 
+  };
+
+  const processInput = (text) => {
+    // This is the function that will receive the input value
+    console.log(`Processing input: ${text}`);
+    // You can replace this with your actual function call
+    fetchAIResponse();
   };
 
   // make FUNCTION GRAB TITLE 
@@ -133,9 +154,24 @@ function App() {
     <div class = "mindquill">
       <h1>Mindquill</h1>
       {/* Disable button while loading */}
-      <button className={`textbook-button ${isLoading ? 'loading' : ''}`} onClick={fetchAIResponse} disabled={isLoading}>
+
+      {/* <button className={`textbook-button ${isLoading ? 'loading' : ''}`} onClick={fetchAIResponse} disabled={isLoading}>
         {isLoading ? 'Fetching...' : 'Ask AI'}
+      </button> */}
+
+      <div>
+      <input class = "other_button"
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Enter text and press Enter"
+      />
+      {/* You can optionally add a button to trigger the function as well */}
+      <button class = "button" onClick={() => processInput(inputValue)} disabled={!inputValue}>
+        Submit
       </button>
+    </div>
       {/* <p>Response:</p> */}
       {/* Use ReactMarkdown to render the responseText */}
       <div class = "markdown">
