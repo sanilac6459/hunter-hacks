@@ -1,5 +1,7 @@
 // import genai from './genai.js'
 import { GoogleGenAI } from "@google/genai";
+// import Dropdown from 'react-dropdown';
+// import 'react-dropdown/style.css';
 
 
 // import React from 'react';
@@ -26,9 +28,13 @@ const API_URL =`https://generativelanguage.googleapis.com/v1beta/models/gemini-2
 
 const ai = new GoogleGenAI({ apiKey: "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q" });
 
-function App() {
 
-  const user_topic = "Write a book about flower in 5 paragraph, 3 sentences in each";
+function App() {
+// make a text box 
+// make a button to submit the text box
+
+
+  const user_topic = "Write 7 paragraphs about Ishra and Sanila two friends going to college on a rainy day, with a title, and the 7 paragraphs following it, each paragraph should have 3 sentences each, just text DON'T ADD like ** for the title";
   const [index, setIndex] = useState(0);
   const colorsArray = ['#FF99C8','#FCF6BD','#D0F4DE','#A9DEF9','#E4C1F9'];
 
@@ -52,145 +58,171 @@ function App() {
     } finally {
        setIsLoading(false); // Set loading to false
     }
+
   };
+
+  // make FUNCTION GRAB TITLE 
+
+  // MAKE FUNCTION GRAB IMAGE
+
+  // make FUNCTION to GRAB EACH PARAGRPAH OF BOOK from responseText which will return as in array 
+
+  // Function to extract paragraphs from responseText
+  const getParagraphs = (text) => {
+    if (!text) return []; // Return empty array if text is empty or null
+    return text.split('\n\n').filter(paragraph => paragraph.trim() !== "");
+  };
+
+  const paragraphs = getParagraphs(responseText); // Get paragraphs.
 
 
   const pokemonData = [
     {
       id: "006",
-      name: "Charizard",
+      name: paragraphs[1],
       types: ["Fire", "Flying"],
       description: "Flies in search of strong opponents. Breathes extremely hot fire that melts anything, but never uses it on weaker foes."
     },
     {
       id: "025",
-      name: "Pikachu",
+      name: paragraphs[2],
       types: ["Electric"],
       description: "When Pikachu meet, they touch tails to exchange electricity as a greeting."
     },
     {
       id: "125",
-      name: "Electabuzz",
+      name: paragraphs[3],
       types: ["Electric"],
       description: "Often kept at power plants to regulate electricity. Competes with others to attract lightning during storms."
     },
     {
       id: "185",
-      name: "Sudowoodo",
+      name: paragraphs[4],
       types: ["Rock"],
       description: "Despite looking like a tree, its body is more like rock. Hates water and hides when it rains."
     },
     {
       id: "448",
-      name: "Lucario",
+      name: paragraphs[5],
       types: ["Fighting", "Steel"],
       description: "Can read thoughts and movements by sensing others' aura. No foe can hide from Lucario."
     },
     {
       id: "658",
-      name: "Greninja",
+      name: paragraphs[6],
       types: ["Water", "Dark"],
       description: "Creates throwing stars from compressed water that can slice through metal when thrown at high speed."
     },
     {
       id: "491",
-      name: "Darkrai",
+      name: paragraphs[7],
       types: ["Dark"],
       description: "A legendary Pokémon that appears on moonless nights, putting people to sleep and giving them nightmares."
     }
   ];
+
+
+// // Function to toggle dropdown visibility
+// const myFunction = () => {
+//     document.getElementById("myDropdown").classList.toggle("show");
+//   };
   
 
   return (
-    <>
-<div className = "Pokemon_book">
-<div 
-    style={{ backgroundColor: colorsArray[index]}}>
-      <button onClick={() => setIndex((index) => {
-            if (index < colorsArray.length - 1) {
-              console.log("index is " + index + 1);
-              return index + 1;} return 0;})}> Click me to change the bg color!</button>
-    
-  
-    <div>
+    <div class="container">
+    <div class = "mindquill">
       <h1>Mindquill</h1>
       {/* Disable button while loading */}
-      <button onClick={fetchAIResponse} disabled={isLoading}>
-         {isLoading ? 'Fetching...' : 'Ask AI'}
+      <button className={`textbook-button ${isLoading ? 'loading' : ''}`} onClick={fetchAIResponse} disabled={isLoading}>
+        {isLoading ? 'Fetching...' : 'Ask AI'}
       </button>
-      <p>Response:</p>
+      {/* <p>Response:</p> */}
       {/* Use ReactMarkdown to render the responseText */}
       <div class = "markdown">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-         {responseText}
-      </ReactMarkdown>
+        
+
+      {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {responseText}
+      </ReactMarkdown> */}
       </div>
     </div>
-  </div>
 
-<HTMLFlipBook
-  width={740} // Increase the width to accommodate two pages (2 * 370)
-  height={1000}
-  maxShadowOpacity={0.5}
-  drawShadow={true}
-  showCover={true}
-  size="fixed" // Keep it fixed if you want consistent two-page display
-  flippingTime={1000} // Optional: Adjust the page flip animation speed
-  perspective={800} // Optional: Adjust the 3D perspective
->
-  {/* Your cover page */}
-  <div className="page" style={{ background: 'transparent' }}>
-    <div className="page-content cover">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
-        alt="Pokémon Logo"
-        className="pokemon-logo"
-      />
-    </div>
-  </div>
+  <HTMLFlipBook 
+      width={740} 
+      height={1000}
+      maxShadowOpacity={0.5}
+      drawShadow={true}
+      showCover={true}
+      size='fixed'
+    >
+      <div className="page" style={{ background: 'transparent' }}>
+        <div className="page-content cover">
 
-  {/* Your Pokémon pages */}
-  {pokemonData.map((pokemon) => (
-    <div className="page" key={pokemon.id}>
-      <div className="page-content">
-        <div className="pokemon-container">
-          <img
-            src={`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${pokemon.id}.png`}
-            alt={pokemon.name}
-          />
-          <div className="pokemon-info">
-            <h2 className="pokemon-name">{pokemon.name}</h2>
-            <p className="pokemon-number">#{pokemon.id}</p>
-            <div>
-              {pokemon.types.map((type) => (
-                <span key={type} className={`pokemon-type type-${type.toLowerCase()}`}>
-                  {type}
-                </span>
-              ))}
-            </div>
-            <p className="pokemon-description">{pokemon.description}</p>
+
+          {/* hidden untill they click */}
+        <h1 className="cover-title">{paragraphs[0] || "No Title"}</h1>          
+          {/* <h1 className="cover-title">paragraphs[0]</h1> */}
+          {/* <h2 className="cover-subtitle">A Journey Through the World of Pokémon</h2> */}
+          <div className="pokemon-logo" >
+
           </div>
+
+          {/* <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" 
+            alt="Pokémon Logo" 
+            className="pokemon-logo"
+            
+          /> */}
         </div>
       </div>
+
+      {pokemonData.map((pokemon) => (
+        <div className="page" key={pokemon.id}>
+          <div className="page-content">
+            <div className="pokemon-container">
+              <img 
+                src={`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${pokemon.id}.png`} 
+                alt={pokemon.name} 
+              />
+              <div className="pokemon-info">
+                <h2 className="pokemon-name">{pokemon.name}</h2>
+                {/* <p className="pokemon-number">#{pokemon.id}</p> */}
+                {/* <div>
+                  {pokemon.types.map((type) => (
+                    <span key={type} className={`pokemon-type type-${type.toLowerCase()}`}>
+                      {type}
+                    </span>
+                  ))}
+                </div> */}
+                {/* <p className="pokemon-description">{pokemon.description}</p> */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      ))}
+
+      {/* <div className="page" key="back-cover">
+        <div className="page-content cover back">
+          <h1>The End</h1>
+          <p>More content can go here.</p>
+        </div>
+      </div> */}
+
+<div className="page" key="back-cover">
+        <div className="page-content cover back"  /* Add onClick handler here */
+             onClick={() => {
+              pageFlip.getPageFlip().flipNext();
+             }}
+        >
+          {/* <h1>The End</h1>
+          <p>Click here to close the book.</p> */}
+        </div>
+      </div>
+
+    </HTMLFlipBook>
     </div>
-  ))}
-</HTMLFlipBook>
-    </div>
-    </>
   );
 }
 
 export default App;
-
-// function App() {
-
-//   const [responseText, setResponseText] = useState(genai.response);
-//   const generate = () => topic; 
-
-//   return (
-//     <button onClick={generate()}>generate</button>
-    
-//   );
-// }
-
-// export default App;
