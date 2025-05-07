@@ -1,14 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600&display=swap");
 
-
-.Pokemon_book {
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -20,7 +11,8 @@ body,
 html {
   height: 100dvh;
   width: 100dvw;
-  background: #0e1a26;
+  /* background: #0e1a26; */
+  background-color: #93d495;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -68,7 +60,8 @@ html {
 }
 
 .cover {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  /* background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); */
+  background: #CCD5AE;
   color: white;
   font-weight: bold;
 }
@@ -154,58 +147,11 @@ html {
 
 .type-steel {
   background-color: #7f8c8d;
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
 }
 
-.dropdown{
-  position: relative; /*positions dropdown content for this cont\ainer*/
-  display: inline-block; /*makes dropdown container sit next to other elments*/
-}
-
-.dropbtn{
-  background-color:#93d495; 
-  color: white; /*color of text*/
-  padding: 15px; /*space in button so text doesnt sit @ borders*/
-  border: none; /*no button border*/
-cursor: pointer;
-}
-
-.dropdown-content{
-  display: none; /*initially, the dropdown contents r hidden*/
-  position: absolute; /*dropdown content stay below the button*/
-  background-color: #FFFFFF; /*background of dropdown menu*/
-  min-width: 160px; /*minimum width of dropdown menu*/
-  box-shadow: 0px 8px 16px 0px rgba(240, 221, 221, 0.2);
-  z-index: 1; /*drop down will stay on top of other content */
-}
-
-/* Links inside the dropdown (Ensure each link appears on a new line) */
-.dropdown-content a {
-  display: block; 
-  padding: 12px 16px; /* padding for the links */
-  text-decoration: none; /* no underlied links */
-  color: black; 
-  margin: 5px 0; /* add space between links */
-}
-
-.dropdown-conent a{
-  display: block; /*links r shown in their own lines*/
-}
 .type-rock {
   background-color: #9a7b4f;
 }
-
 
 .pokemon-description {
   font-size: 14px;
@@ -214,11 +160,48 @@ cursor: pointer;
   line-height: 1.4;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
-
-.show {display:block;}
-
 .demoPage {
-  background: blue;
+  background: #fff;
   color: #000;
+}
+
+.cover-title {
+  font-size: 100px;
+  font-weight: bold;
+  color: #333;
+}
+
+.mindquill{
+  font-size: 50px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.other_button{
+  background-color: whitesmoke;
+  color: black;
+  border: none;
+  padding: 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
 }
