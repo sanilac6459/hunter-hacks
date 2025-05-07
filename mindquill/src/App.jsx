@@ -1,42 +1,14 @@
+// import genai from './genai.js'
+import { GoogleGenAI } from "@google/genai";
+// import Dropdown from 'react-dropdown';
+// import 'react-dropdown/style.css';
 
-// import React, { useState } from "react";
-// import axios from "axios";
 
-// const API_KEY = "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q";
-// const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q`;
-// //`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.1-pro:generateContent?key=AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q`;
-// function App() {
-//   const [responseText, setResponseText] = useState("");
+// import React from 'react';
 
-//   const fetchAIResponse = async () => {
-//     try {
-//       const response = await axios.post(API_URL, {
-//         contents: [{ parts: [{ text: "Provide the C++ code to print hello world" }] }],
-//       });
-
-//       setResponseText(response.data?.candidates?.[0]?.content?.parts?.[0]?.text  ?? "No response");
-//     } catch (error) {
-//       console.error("Error:", error);
-//       setResponseText("Error fetching AI response.");
-//     }
-//   };
-  // console.log("API Response:", response.data);
-
-// console.log({responseText});
-
-//   return (
-//     <div>
-//       <h1>Mindquill</h1>
-//       <button onClick={fetchAIResponse}>Ask AI</button>
-//       {/* <p>The response is: {responseText}</p> */}
-//       <p>{responseText}</p>
-//     </div>
-//   );
-// }
-
-// export default App;
 
 import React, { useState } from "react";
+// import { GoogleGenAI } from "@google/genai";
 import axios from "axios";
 import ReactMarkdown from 'react-markdown'; // Import ReactMarkdown
 import remarkGfm from 'remark-gfm'; // Import a plugin for handling markdown features
@@ -48,69 +20,46 @@ import remarkGfm from 'remark-gfm'; // Import a plugin for handling markdown fea
 // WARNING: Hardcoding API key in frontend is INSECURE.
 // Use environment variables or a backend in production.
 import HTMLFlipBook from 'react-pageflip';
-import { GoogleGenAI, Modality } from "@google/genai";
+
 const API_KEY = "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q";
 
 
 const API_URL =`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-const API_IMAGE_URL= 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q';
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+
+const ai = new GoogleGenAI({ apiKey: "AIzaSyDuYyzAp6Kmx0ImIzv7ZVYHvkaRgdGK56Q" });
 
 
 function App() {
-  
+// make a text box 
+// make a button to submit the text box
+
+const [inputValue, setInputValue] = useState('');
+
+const handleInputChange = (event) => {
+  setInputValue(event.target.value);
+};
+
+const handleKeyDown = (event) => {
+  if (event.key === 'Enter') {
+    // Call your function here with the inputValue
+    processInput(inputValue);
+    // Optionally clear the input after processing
+    setInputValue('');
+  }
+};
+
+  const user_topic = "Create a story about" + inputValue + "First paragraph must be title, then 6 paragraphs, and the last paragrpah must be The End paragraph, and also each body paragraph must be 3 sentences, short sentences, whatever the story is it must relate back to health and wellness, don't bold anymore"; // This is the input value from the text box
   const [index, setIndex] = useState(0);
   const colorsArray = ['#FF99C8','#FCF6BD','#D0F4DE','#A9DEF9','#E4C1F9'];
 
   const [responseText, setResponseText] = useState("");
   const [isLoading, setIsLoading] = useState(false); 
 
-  const [imageUrl, setImageUrl] = useState("");
-
-  const generateImage = async (ImagePrompt) => {
-    try {
-      const response = await axios.post(API_IMAGE_URL, {
-        contents: [
-          {
-            parts: [
-              {
-                text: ImagePrompt
-              }
-            ]
-          }
-        ],
-        generationConfig: {
-          responseModalities: ["TEXT", "IMAGE"]
-        }
-      });
-
-      console.log("API Response:", response.data); // Debugging logs
-
-      // Extracting Image Data
-     
-      const imageData = response.data?.candidates?.[0]?.content?.parts?.find(part => part.inlineData);
-      const imageURL = imageData.inlineData.data;
-      // const imageData = response.data?.candidates?.[0]?.content?.parts?.find(part => part.inlineData);
-      //  console.log("Extracted InlineData:", imageData);
-      // console.log("MIME Type:", imageData?.mimeType);
-      // console.log("Base64 Data:", imageData?.data);
-
-      if (imageData) {
-        console.log("Extracted Image Data:", imageData); // Debugging log
-        setImageUrl(`data:${imageData.mimeType};base64,${imageData.inlineData.data}`);
-      } else {
-        console.error("No image data found in response.");
-      }
-    } catch (error) {
-      console.error("Error generating image:", error.response?.data || error.message);
-    }
-    console.log("image url is: " + imageUrl);
-  };
   const fetchAIResponse = async () => {
     setIsLoading(true);
     try {
       const response = await axios.post(API_URL, {
-        contents: [{ parts: [{ text: "Write a poem about flower in 50 words" }] }],
+        contents: [{ parts: [{ text: user_topic }] }],
       });
 
       const aiContent = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -123,115 +72,193 @@ function App() {
     } finally {
        setIsLoading(false); // Set loading to false
     }
+
   };
 
-  // Consider fetching on mount or based on user action
-  // Example using useEffect to fetch on mount (like before):
-  /*
-  useEffect(() => {
+  const processInput = (text) => {
+    // This is the function that will receive the input value
+    console.log(`Processing input: ${text}`);
+    // You can replace this with your actual function call
     fetchAIResponse();
-  }, []); // Empty dependency array to run only once on mount
-  */
-
-  // Function to toggle dropdown visibility
-  const myFunction = () => {
-    document.getElementById("myDropdown").classList.toggle("show");
   };
+
+  // make FUNCTION GRAB TITLE 
+
+  // MAKE FUNCTION GRAB IMAGE
+
+  // make FUNCTION to GRAB EACH PARAGRPAH OF BOOK from responseText which will return as in array 
+
+  // Function to extract paragraphs from responseText
+  const getParagraphs = (text) => {
+    if (!text) return []; // Return empty array if text is empty or null
+    return text.split('\n\n').filter(paragraph => paragraph.trim() !== "");
+  };
+
+  const paragraphs = getParagraphs(responseText); // Get paragraphs.
+
+
+  const pokemonData = [
+    {
+      id: "006",
+      name: paragraphs[1],
+      types: ["Fire", "Flying"],
+      description: "Flies in search of strong opponents. Breathes extremely hot fire that melts anything, but never uses it on weaker foes."
+    },
+    {
+      id: "025",
+      name: paragraphs[2],
+      types: ["Electric"],
+      description: "When Pikachu meet, they touch tails to exchange electricity as a greeting."
+    },
+    {
+      id: "125",
+      name: paragraphs[3],
+      types: ["Electric"],
+      description: "Often kept at power plants to regulate electricity. Competes with others to attract lightning during storms."
+    },
+    {
+      id: "185",
+      name: paragraphs[4],
+      types: ["Rock"],
+      description: "Despite looking like a tree, its body is more like rock. Hates water and hides when it rains."
+    },
+    {
+      id: "448",
+      name: paragraphs[5],
+      types: ["Fighting", "Steel"],
+      description: "Can read thoughts and movements by sensing others' aura. No foe can hide from Lucario."
+    },
+    {
+      id: "658",
+      name: paragraphs[6],
+      types: ["Water", "Dark"],
+      description: "Creates throwing stars from compressed water that can slice through metal when thrown at high speed."
+    },
+    {
+      id: "491",
+      name: paragraphs[7],
+      types: ["Dark"],
+      description: "A legendary Pokémon that appears on moonless nights, putting people to sleep and giving them nightmares."
+    }
+  ];
+
+
+// // Function to toggle dropdown visibility
+// const myFunction = () => {
+//     document.getElementById("myDropdown").classList.toggle("show");
+//   };
+  
+
   return (
-    <>
-    <div>
-      <h1>Gemini Image Generator</h1>
-      <button onClick={() => generateImage("A futuristic city with flying cars")}>Generate Image</button>
-      {imageUrl && <img src={imageUrl} alt="Generated AI Art" />}
+    <div class="container">
+    <div class = "mindquill">
+      <h1>Mindquill</h1>
+      {/* Disable button while loading */}
+
+      {/* <button className={`textbook-button ${isLoading ? 'loading' : ''}`} onClick={fetchAIResponse} disabled={isLoading}>
+        {isLoading ? 'Fetching...' : 'Ask AI'}
+      </button> */}
+
+      <div>
+      <input class = "other_button"
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Enter text and press Enter"
+      />
+      {/* You can optionally add a button to trigger the function as well */}
+      <button class = "button" onClick={() => processInput(inputValue)} disabled={!inputValue}>
+        Submit
+      </button>
+    </div>
+      {/* <p>Response:</p> */}
+      {/* Use ReactMarkdown to render the responseText */}
+      <div class = "markdown">
+        
+
+      {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {responseText}
+      </ReactMarkdown> */}
+      </div>
     </div>
 
-    <HTMLFlipBook width={300} height={500}>
-            {/* <PageCover>BOOK TITLE</PageCover> */}
-            <div className="page 0">
-                <h1>Title of Page 1</h1>
-                <p>This is the paragraph below the title. You can add more details here.</p>
-            </div>
-            <div className="demoPage">Page 1</div>
-            <div className="demoPage">Page 2</div>
-            <div className="demoPage">Page 3</div>
-            <div className="demoPage">Page 4</div>
-        </HTMLFlipBook>
-    <div className = "flexbox-container"
-    style={{ backgroundColor: colorsArray[index]}}>
-      <button onClick={() => setIndex((index) => {
-            if (index < colorsArray.length - 1) {
-              console.log("index is " + index + 1);
-              return index + 1;} return 0;})}> Click me to change the bg color!</button>
-    
-  {/* Dropdown menu */}
-  <div className="dropdown"> {/*creates div conatiner for dopdwon menu, cssclass "dropdown" is used to style the drop down menu*/}
-        <button onClick={myFunction} className="dropbtn">Choose Topic</button> {/*button user clicks to show dropdown menu*/}
-        <div id="myDropdown" className="dropdown-content"> {/*shows contents of button*/}
-          <a href="#">Anxiety Relief</a> {/*anchor links*/}
-          <a href="#">Self-Esteem Boost</a>
-          <a href="#">Stress Management</a>
+  <HTMLFlipBook 
+      width={740} 
+      height={1000}
+      maxShadowOpacity={0.5}
+      drawShadow={true}
+      showCover={true}
+      size='fixed'
+    >
+      <div className="page" style={{ background: 'transparent' }}>
+        <div className="page-content cover">
+
+
+          {/* hidden untill they click */}
+        <h1 className="cover-title">{paragraphs[0] || "No Title"}</h1>          
+          {/* <h1 className="cover-title">paragraphs[0]</h1> */}
+          {/* <h2 className="cover-subtitle">A Journey Through the World of Pokémon</h2> */}
+          <div className="pokemon-logo" >
+
+          </div>
+
+          {/* <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" 
+            alt="Pokémon Logo" 
+            className="pokemon-logo"
+            
+          /> */}
         </div>
       </div>
 
-    <div>
-      <h1>Mindquill</h1>
-      {/* Disable button while loading */}
-      <button onClick={fetchAIResponse} disabled={isLoading}>
-         {isLoading ? 'Fetching...' : 'Ask AI'}
-      </button>
-      <p>Response:</p>
-      {/* Use ReactMarkdown to render the responseText */}
-      <div class = "markdown">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-         {responseText}
-      </ReactMarkdown>
+      {pokemonData.map((pokemon) => (
+        <div className="page" key={pokemon.id}>
+          <div className="page-content">
+            <div className="pokemon-container">
+              <img 
+                src={`https://www.pokemon.com/static-assets/content-assets/cms2/img/pokedex/full/${pokemon.id}.png`} 
+                alt={pokemon.name} 
+              />
+              <div className="pokemon-info">
+                <h2 className="pokemon-name">{pokemon.name}</h2>
+                {/* <p className="pokemon-number">#{pokemon.id}</p> */}
+                {/* <div>
+                  {pokemon.types.map((type) => (
+                    <span key={type} className={`pokemon-type type-${type.toLowerCase()}`}>
+                      {type}
+                    </span>
+                  ))}
+                </div> */}
+                {/* <p className="pokemon-description">{pokemon.description}</p> */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      ))}
+
+      {/* <div className="page" key="back-cover">
+        <div className="page-content cover back">
+          <h1>The End</h1>
+          <p>More content can go here.</p>
+        </div>
+      </div> */}
+
+<div className="page" key="back-cover">
+        <div className="page-content cover back"  /* Add onClick handler here */
+             onClick={() => {
+              pageFlip.getPageFlip().flipNext();
+             }}
+        >
+          {/* <h1>The End</h1>
+          <p>Click here to close the book.</p> */}
+        </div>
       </div>
+
+    </HTMLFlipBook>
     </div>
-  </div>
-    </>
   );
 }
 
 export default App;
-
-
-
-
-
-
-
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
-
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.jsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
-
-// export default App
